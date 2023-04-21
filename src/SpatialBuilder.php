@@ -18,27 +18,23 @@ use MatanYadaev\EloquentSpatial\Objects\Geometry;
  */
 class SpatialBuilder extends Builder
 {
-  // public function withDistance(
-  //   string $column,
-  //   Geometry|string $geometryOrColumn,
-  //   string $alias = 'distance'
-  // ): self
-  // {
-  //   if (! $this->getQuery()->columns) {
-  //     $this->select('*');
-  //   }
+  public function withDistance(string $column, Geometry|string $geometryOrColumn, string $alias = 'distance'): self
+  {
+    if (! $this->getQuery()->columns) {
+      $this->select('*');
+    }
 
-  //   $this->selectRaw(
-  //     sprintf(
-  //       'STDistance(%s, %s) AS %s',
-  //       $this->getQuery()->getGrammar()->wrap($column),
-  //       $this->toExpression($geometryOrColumn),
-  //       $alias,
-  //     )
-  //   );
+    $this->selectRaw(
+      sprintf(
+        '(SELECT %s.STDistance(%s)) AS %s',
+        $this->getQuery()->getGrammar()->wrap($column),
+        $this->toExpression($geometryOrColumn),
+        $alias,
+      )
+    );
 
-  //   return $this;
-  // }
+    return $this;
+  }
 
   // public function whereDistance(
   //   string $column,
