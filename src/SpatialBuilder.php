@@ -199,18 +199,18 @@ class SpatialBuilder extends Builder
   //   return $this;
   // }
 
-  // public function whereIntersects(string $column, Geometry|string $geometryOrColumn): self
-  // {
-  //   $this->whereRaw(
-  //     sprintf(
-  //       'STIntersects(%s, %s)',
-  //       $this->getQuery()->getGrammar()->wrap($column),
-  //       $this->toExpression($geometryOrColumn),
-  //     )
-  //   );
+  public function whereIntersects(string $column, Geometry|string $geometryOrColumn): self
+  {
+    $this->whereRaw(
+      sprintf(
+        '(SELECT %s.STIntersects(%s)) = 1',
+        $this->getQuery()->getGrammar()->wrap($column),
+        $this->toExpression($geometryOrColumn),
+      )
+    );
 
-  //   return $this;
-  // }
+    return $this;
+  }
 
   // public function whereCrosses(string $column, Geometry|string $geometryOrColumn): self
   // {
