@@ -199,4 +199,14 @@ abstract class Geometry implements Castable, Arrayable, Jsonable, JsonSerializab
   {
     return Geometry::fromWKt(DB::select(DB::raw("DECLARE @g geography = '{$this->toWkt()}'; SELECT @g.EnvelopeCenter().ToString() as center;"))[0]->center, 4326);
   }
+  
+  /**
+   * Get a point that is guaranteed to be in the shape.
+   *
+   * @return Point
+   */
+  public function getPointOnService(): Point
+  {
+    return Geometry::fromWkt(DB::select(DB::raw("DECLARE @g geometry = '{$this->toWkt()}'; SELECT @g.STPointOnSurface().ToString() as point;"))[0]->point, 4326);
+  }
 }
